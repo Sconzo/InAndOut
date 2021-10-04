@@ -1,7 +1,6 @@
 ﻿using InAndOut.Data;
 using InAndOut.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,41 +8,33 @@ using System.Threading.Tasks;
 
 namespace InAndOut.Controllers
 {
-    public class ExpensesController : Controller
+    public class ExpenseTypeController : Controller
     {
         private readonly ApplicationDbContext _db;
 
-        public ExpensesController(ApplicationDbContext db)
+        public ExpenseTypeController(ApplicationDbContext db)
         {
             _db = db;
         }
         public IActionResult Index()
         {
-            IEnumerable<Expense> objList = _db.Expenses;
+            IEnumerable<ExpenseType> objList = _db.ExpenseTypes;
             return View(objList);
         }
 
         //GET - Create
         public IActionResult Create()
         {
-            IEnumerable<SelectListItem> TypeDropDown = _db.ExpenseTypes.Select(i => new SelectListItem
-            {
-                Text = i.ExpenseTypeName,
-                Value = i.Id.ToString()
-            });
-
-            ViewBag.TypeDropDown = TypeDropDown;
-
             return View();
         }
         //POST - Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Expense obj)
+        public IActionResult Create(ExpenseType obj)
         {
             if (ModelState.IsValid)
             {
-                _db.Expenses.Add(obj);
+                _db.ExpenseTypes.Add(obj);
                 _db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -54,9 +45,9 @@ namespace InAndOut.Controllers
         public IActionResult Delete(int? id)
         {
             if (id == null) return NotFound();
-            var obj = _db.Expenses.Find(id);
+            var obj = _db.ExpenseTypes.Find(id);
             if (obj == null) return NotFound();
-            
+
             return View(obj);
 
         }
@@ -66,21 +57,21 @@ namespace InAndOut.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeletePost(int? id)
         {
-            var obj = _db.Expenses.Find(id);
+            var obj = _db.ExpenseTypes.Find(id);
             if (obj == null) return NotFound();
 
-            
-            _db.Expenses.Remove(obj);
+
+            _db.ExpenseTypes.Remove(obj);
             _db.SaveChanges();
             return RedirectToAction("Index");
-            
+
         }
 
         //GET - UPDATE
         public IActionResult Update(int? id)
         {
             if (id == null) return NotFound();
-            var obj = _db.Expenses.Find(id);
+            var obj = _db.ExpenseTypes.Find(id);
             if (obj == null) return NotFound();
 
             return View(obj);
@@ -90,11 +81,11 @@ namespace InAndOut.Controllers
         //POST - UPDATE
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Updatepost(Expense obj)
+        public IActionResult Updatepost(ExpenseType obj)
         {
             if (ModelState.IsValid)
             {
-                _db.Expenses.Update(obj);
+                _db.ExpenseTypes.Update(obj);
                 _db.SaveChanges();
                 return RedirectToAction("Index");
             }
