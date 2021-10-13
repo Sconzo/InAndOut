@@ -22,6 +22,7 @@ namespace InAndOut.Models
 
         [DisplayName("Expense Type")]
         public int? ExpenseTypeId { get; set; }
+
         [ForeignKey("ExpenseTypeId")]
         public virtual ExpenseType ExpenseType { get; set; }
     }
